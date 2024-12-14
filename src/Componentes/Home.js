@@ -125,14 +125,7 @@ const [initConfig, setInitConfig] = useState(() => {
     };
   }
 });
-//--------------------------------
 
-useEffect(() => {
-  console.log('Configuración actual (Edge):', initConfig);
-  console.log('Ubicación actual (Edge):', ubication);
-}, [initConfig, ubication]);
-
-//--------------------------------
 
   const [ almanacType, setAlmanacType ] = useState(initConfig.almanacType)
   const [ modoNocturno, setModoNocturno ] = useState(initConfig.modoNocturno)
@@ -279,14 +272,16 @@ useEffect(() => {
       }else{
         console.log('la geolocalizacion esta desactivada')
       }
-    
+    /*
     const updatedConfig = {
       ...initConfig,
       ubicacion: ubication
     }
-      
-    setInitConfig(updatedConfig);
-    localStorage.setItem('settingsFarmaciaV2', JSON.stringify(updatedConfig));
+     */
+    initConfig.ubicacion = ubication
+
+    //setInitConfig(updatedConfig);
+    localStorage.setItem('settingsFarmaciaV2', JSON.stringify(initConfig));
   },[ubication])
 
   //Cambia el estado para mostrar el cartel de consulta para la geolocalizacion.
