@@ -1,0 +1,23 @@
+.container-btn-error{
+  margin-top: 20px;
+  max-width: 100%;
+}
+.btn-cerrar-error {
+  background-color: red;
+  border: none;
+  padding: .5rem;
+  border-radius: 0.75rem;
+  color: white;
+}
+
+@media screen and ( min-width: 37em) {
+  .cuadro-question {
+    max-width: 20%;
+  }
+}
+
+@media screen and ( min-width: 500px) {
+  .cuadro-question {
+    max-width: 30%;
+  }
+}

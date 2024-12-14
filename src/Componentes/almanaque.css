@@ -1,0 +1,54 @@
+.containerAlmanac {
+  width: 80%;
+  height: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.caption {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  position: relative;
+  margin-bottom: 1rem;
+  font-weight: bold;
+}
+table {
+  border: 1px solid green;
+  border-radius: .5rem;
+  padding: .7rem;
+  width: 100%;
+  text-align: center;
+}
+td {
+  box-sizing: border-box;
+}
+.btn-mes {
+  border: none;
+  background: transparent;
+  margin: 0 1rem;
+  position: absolute;
+}
+.btn-prev {
+  left: 0;
+}
+.btn-next {
+  right: 0;
+}
+.msj-hs {
+  margin-top: 1rem;
+}
+@media screen and ( min-width: 37em) {
+  table {
+    height: 50vh;
+  }
+  .containerAlmanac {
+    height: 80%;
+  }
+}
