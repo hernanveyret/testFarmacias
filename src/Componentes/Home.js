@@ -125,8 +125,14 @@ const [initConfig, setInitConfig] = useState(() => {
     };
   }
 });
+//--------------------------------
 
+useEffect(() => {
+  console.log('Configuración actual (Edge):', initConfig);
+  console.log('Ubicación actual (Edge):', ubication);
+}, [initConfig, ubication]);
 
+//--------------------------------
 
   const [ almanacType, setAlmanacType ] = useState(initConfig.almanacType)
   const [ modoNocturno, setModoNocturno ] = useState(initConfig.modoNocturno)
