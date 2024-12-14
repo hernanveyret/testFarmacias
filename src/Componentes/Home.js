@@ -67,10 +67,10 @@ const Home = () => {
   let bodyRef = useRef()
   let fotterRef = useRef()
   let cardHeaderRef = useRef()
-
+/*
   let localConfig = localStorage.getItem('settingsFarmaciaV2');
   console.log(JSON.parse(localConfig))
-  /*
+  
   const [ initConfig, setInitConfig ] = useState(() => {
     if(localConfig){
       let contLocalConfig = JSON.parse(localConfig);
@@ -94,7 +94,7 @@ const Home = () => {
       }
     }
   })
- */
+ 
   
   const [ initConfig, setInitConfig ] = useState(localConfig ? JSON.parse(localConfig) : { 
     modoNocturno: false,
@@ -103,9 +103,31 @@ const Home = () => {
     ubicacion: true,
     question: true
   });
+*/
 
-  console.log(initConfig)
-  
+const [initConfig, setInitConfig] = useState(() => {
+  let localConfig = JSON.parse(localStorage.getItem('settingsFarmaciaV2'));
+  if (localConfig) {
+    return {
+      modoNocturno: localConfig.modoNocturno || false,
+      almanacType: localConfig.almanacType || true,
+      advertising: localConfig.advertising || false,
+      ubicacion: localConfig.hasOwnProperty('ubicacion') ? localConfig.ubicacion : true,
+      question: localConfig.hasOwnProperty('question') ? localConfig.question : true,
+    };
+  } else {
+    return {
+      modoNocturno: false,
+      almanacType: true,
+      advertising: false,
+      ubicacion: true,
+      question: true,
+    };
+  }
+});
+
+
+
   const [ almanacType, setAlmanacType ] = useState(initConfig.almanacType)
   const [ modoNocturno, setModoNocturno ] = useState(initConfig.modoNocturno)
   const [ ubication, setUbication ] = useState(initConfig.ubicacion)
