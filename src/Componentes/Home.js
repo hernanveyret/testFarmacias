@@ -226,15 +226,6 @@ const [ positions, setPositions ] = useState(null)
       setLat1(position.coords.latitude);
       setLon1(position.coords.longitude);
         
-          if(lat1 === 0 || lon1 === 0 ){
-            console.log('recalculando........')
-            navigator.geolocation.getCurrentPosition(function(position) {
-              setPositions(position)
-              setLat1(position.coords.latitude);
-              setLon1(position.coords.longitude);
-              
-            });            
-          }
     }
     
     const error = (err) => {
