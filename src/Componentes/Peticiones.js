@@ -172,10 +172,8 @@ useEffect(() => {
   }
 
   function showDistance(numDistance){
-    console.log('funcion ver distancia')
     if(numDistance > 7000.0){
-      console.log('es mayor a 7000.0')
-      //setUbication(false)
+      setUbication(false)
       //window.location.reload(); // recarga la pagina si da un error.
     }else{
       if(numDistance < 1 ){
