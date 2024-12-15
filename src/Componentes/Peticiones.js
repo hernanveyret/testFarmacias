@@ -172,10 +172,11 @@ useEffect(() => {
   }
 
   function showDistance(numDistance){
+    console.log('funcion ver distancia')
     if(numDistance > 7000.0){
       console.log('es mayor a 7000.0')
-      setUbication(false)
-      window.location.reload();
+      //setUbication(false)
+      //window.location.reload(); // recarga la pagina si da un error.
     }else{
       if(numDistance < 1 ){
         return `${ Math.round(numDistance * 1000)} Mt.`
@@ -187,7 +188,7 @@ useEffect(() => {
     }
     
   }
-  console.log(array)
+  
 //<p>{ e.distance < 1 ? `${ Math.round(e.distance * 1000)} Mt.` : `${ e.distance} Km.`}</p>
   return (
     <div className="containerFarmacias">

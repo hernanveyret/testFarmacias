@@ -11,7 +11,7 @@ import Error from './Error';
 
 import './home.css';
 
-const Home = () => {
+const backUpHome = () => {
   const meces = [
     {
       id: 0,
@@ -67,6 +67,43 @@ const Home = () => {
   let bodyRef = useRef()
   let fotterRef = useRef()
   let cardHeaderRef = useRef()
+/*
+  let localConfig = localStorage.getItem('settingsFarmaciaV2');
+  console.log(JSON.parse(localConfig))
+  
+  const [ initConfig, setInitConfig ] = useState(() => {
+    if(localConfig){
+      let contLocalConfig = JSON.parse(localConfig);
+        if(contLocalConfig.hasOwnProperty('ubicacion')){
+          return contLocalConfig
+        } else {
+          return {
+            ...contLocalConfig,
+            advertising: false,
+            ubicacion: true,
+            question: true
+          }
+        }
+    } else {
+      return {
+        modoNocturno: false,
+        almanacType: true,
+        advertising: false,
+        ubicacion: true,
+        question: true
+      }
+    }
+  })
+ 
+  
+  const [ initConfig, setInitConfig ] = useState(localConfig ? JSON.parse(localConfig) : { 
+    modoNocturno: false,
+    almanacType: true,
+    advertising: false,
+    ubicacion: true,
+    question: true
+  });
+*/
 
 const [initConfig, setInitConfig] = useState(() => {
   let localConfig = JSON.parse(localStorage.getItem('settingsFarmaciaV2'));
@@ -89,7 +126,6 @@ const [initConfig, setInitConfig] = useState(() => {
   }
 });
 
-const [ positions, setPositions ] = useState(null)
 
   const [ almanacType, setAlmanacType ] = useState(initConfig.almanacType)
   const [ modoNocturno, setModoNocturno ] = useState(initConfig.modoNocturno)
@@ -210,34 +246,39 @@ const [ positions, setPositions ] = useState(null)
     localStorage.setItem('settingsFarmaciaV2', JSON.stringify(updatedConfig));
   }, [almanacType]);
 
-
+function geo(){
+  console.log('llamo a la funcion geo')
+  const options = {
+    enableHighAccuracy: true,
+    timeout: 5000,
+    maximumAge: 0
+  }
   
+  const success = ( position ) => {
+    setLat1(position.coords.latitude);
+    setLon1(position.coords.longitude)
+  }
+  
+  const error = (err) => {
+    setUbication(false)
+    setError(true)
+    console.log('codigo de error: ',err.code)
+    console.log('mensage: ',err.message)
+  }
+  
+    if('geolocation' in navigator){   
+      console.log('geolocalizacion activada')   
+      navigator.geolocation.getCurrentPosition(success,error,options)
+    }else{
+      console.log('la geolocalizacion esta desactivada')
+    }
+}
 
   // Cambia el estado de ubicacion en settings y en el localStorage.
   useEffect(() => {
-        
-   
-    if ("geolocation" in navigator) {
-      // Obtener la ubicación actual del usuario
-      navigator.geolocation.getCurrentPosition(function(position) {
-        setPositions(position)
-        setLat1(position.coords.latitude); // Latitud
-        setLon1(position.coords.longitude); // Longitud
-        
-          if(lat1 === 0 || lon1 === 0 ){
-            console.log('recalculando........')
-            navigator.geolocation.getCurrentPosition(function(position) {
-              setLat1(position.coords.latitude); // Latitud
-              setLon1(position.coords.longitude); // Longitud
-              
-            });            
-          }
-      });
-    } else {
-      console.log("La geolocalización no es compatible con este navegador.");
-      alert("La geolocalización no es compatible con este navegador.")
-    }
-  
+        if(ubication === true){
+          geo()
+        }
     const updatedConfig = {
       ...initConfig,
       ubicacion: ubication
@@ -246,13 +287,6 @@ const [ positions, setPositions ] = useState(null)
 setInitConfig(updatedConfig);
     localStorage.setItem('settingsFarmaciaV2', JSON.stringify(updatedConfig));
   },[ubication])
-
-useEffect(() => {
-  console.log(positions)
-  console.log(lat1)
-  console.log(lon1)
-},[lat1,lon1,positions])
- 
 
   //Cambia el estado para mostrar el cartel de consulta para la geolocalizacion.
   useEffect(() => {
@@ -370,4 +404,4 @@ useEffect(() => {
   )
 }
 
-export default Home;
+export default backUpHome;
