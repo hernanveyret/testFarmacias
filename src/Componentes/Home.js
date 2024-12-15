@@ -215,28 +215,41 @@ const [ positions, setPositions ] = useState(null)
 
   // Cambia el estado de ubicacion en settings y en el localStorage.
   useEffect(() => {
-        
-   
-    if ("geolocation" in navigator) {
-      // Obtener la ubicación actual del usuario
-      navigator.geolocation.getCurrentPosition(function(position) {
-        setPositions(position)
-        setLat1(position.coords.latitude); // Latitud
-        setLon1(position.coords.longitude); // Longitud
+    const options = {
+      enableHighAccuracy: true,
+      timeout: 5000,
+      maximumAge: 0
+    }
+    
+    const success = ( position ) => {
+      setPositions(position)
+      setLat1(position.coords.latitude);
+      setLon1(position.coords.longitude);
         
           if(lat1 === 0 || lon1 === 0 ){
             console.log('recalculando........')
             navigator.geolocation.getCurrentPosition(function(position) {
-              setLat1(position.coords.latitude); // Latitud
-              setLon1(position.coords.longitude); // Longitud
+              setPositions(position)
+              setLat1(position.coords.latitude);
+              setLon1(position.coords.longitude);
               
             });            
           }
-      });
-    } else {
-      console.log("La geolocalización no es compatible con este navegador.");
-      alert("La geolocalización no es compatible con este navegador.")
     }
+    
+    const error = (err) => {
+      setUbication(false)
+      setError(true)
+      console.log('codigo de error: ',err.code)
+      console.log('mensage: ',err.message)
+    }
+   
+    if('geolocation' in navigator){     
+      navigator.geolocation.getCurrentPosition(success,error,options)
+
+    }else{
+      console.log('la geolocalizacion esta desactivada')
+    }  
   
     const updatedConfig = {
       ...initConfig,
@@ -247,11 +260,7 @@ setInitConfig(updatedConfig);
     localStorage.setItem('settingsFarmaciaV2', JSON.stringify(updatedConfig));
   },[ubication])
 
-useEffect(() => {
-  console.log(positions)
-  console.log(lat1)
-  console.log(lon1)
-},[lat1,lon1,positions])
+
  
 
   //Cambia el estado para mostrar el cartel de consulta para la geolocalizacion.

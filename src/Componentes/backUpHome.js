@@ -246,39 +246,36 @@ const [initConfig, setInitConfig] = useState(() => {
     localStorage.setItem('settingsFarmaciaV2', JSON.stringify(updatedConfig));
   }, [almanacType]);
 
-function geo(){
-  console.log('llamo a la funcion geo')
-  const options = {
-    enableHighAccuracy: true,
-    timeout: 5000,
-    maximumAge: 0
-  }
-  
-  const success = ( position ) => {
-    setLat1(position.coords.latitude);
-    setLon1(position.coords.longitude)
-  }
-  
-  const error = (err) => {
-    setUbication(false)
-    setError(true)
-    console.log('codigo de error: ',err.code)
-    console.log('mensage: ',err.message)
-  }
-  
-    if('geolocation' in navigator){   
-      console.log('geolocalizacion activada')   
-      navigator.geolocation.getCurrentPosition(success,error,options)
-    }else{
-      console.log('la geolocalizacion esta desactivada')
-    }
-}
+
 
   // Cambia el estado de ubicacion en settings y en el localStorage.
   useEffect(() => {
-        if(ubication === true){
-          geo()
-        }
+    console.log('llamo a la funcion geo')
+    const options = {
+      enableHighAccuracy: true,
+      timeout: 5000,
+      maximumAge: 0
+    }
+    
+    const success = ( position ) => {
+      setLat1(position.coords.latitude);
+      setLon1(position.coords.longitude)
+    }
+    
+    const error = (err) => {
+      setUbication(false)
+      setError(true)
+      console.log('codigo de error: ',err.code)
+      console.log('mensage: ',err.message)
+    }
+    
+      if('geolocation' in navigator){   
+        console.log('geolocalizacion activada')   
+        navigator.geolocation.getCurrentPosition(success,error,options)
+      }else{
+        console.log('la geolocalizacion esta desactivada')
+      }  
+
     const updatedConfig = {
       ...initConfig,
       ubicacion: ubication
