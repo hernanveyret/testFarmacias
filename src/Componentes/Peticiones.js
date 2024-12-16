@@ -1,220 +1,155 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import './peticiones.css';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import "./peticiones.css";
 
-const Peticiones = ({hora, day,setDay, month, year, setLoader,setMonth,setUbication,ubication,lat1,lon1 }) => {
+const Peticiones = ({
+  hora,
+  day,
+  month,
+  year,
+  setLoader, // Asegúrate de que esta prop sea opcional y manejada correctamente
+  ubication,
+  lat1,
+  lon1,
+}) => {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
-  const [array, setArray] = useState([])
-  const [letra, setLetra] = useState('')
-  
-  //const url = 'http://localhost:5000/2024'
-  //const url = 'https://raw.githubusercontent.com/hernanveyret/farmaciasDeTurnoSN/main/src/Api/farmacias2024.json'
-  const url = 'https://farmacia-servidor.vercel.app/api/farmacias'
+  const [array, setArray] = useState([]);
+  const [letra, setLetra] = useState("");
+
+  const url = "https://farmacia-servidor.vercel.app/api/farmacias";
 
   const convertToTime = (timeStr) => {
-    const [hours, minutes, seconds] = timeStr.split(':');
+    const [hours, minutes, seconds] = timeStr.split(":").map(Number);
     return new Date(2024, 0, 1, hours, minutes, seconds).getTime();
   };
 
   const horaActual = convertToTime(hora);
-  const inicio = convertToTime('00:00:00');
-  const fin = convertToTime('08:30:00');
+  const inicio = convertToTime("00:00:00");
+  const fin = convertToTime("08:30:00");
 
+  const calcularDistancia = (lat1, lon1, lat2, lon2) => {
+    const R = 6371;
+    const dLat = ((lat2 - lat1) * Math.PI) / 180;
+    const dLon = ((lon2 - lon1) * Math.PI) / 180;
+
+    const a =
+      Math.sin(dLat / 2) ** 2 +
+      Math.cos((lat1 * Math.PI) / 180) *
+        Math.cos((lat2 * Math.PI) / 180) *
+        Math.sin(dLon / 2) ** 2;
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+  };
+
+  // Fetch de datos
   useEffect(() => {
-
-    //console.log(new Date())
-
-    setLoader(true);
-    axios.get(url)
-      .then(response => {
-       //console.log(response) 
+    const fetchData = async () => {
+      try {
+        if (setLoader) setLoader(true); // Evitar llamadas durante renderizado
+        const response = await axios.get(url);
         setData(response.data);
-        setLoader(false);
-      })
-      .catch(error => {
-        console.error('Error al obtener los datos:', error);
-        setError('Hubo un error al obtener los datos.');
-        setLoader(false);
-      });
+      } catch (err) {
+        console.error("Error al obtener los datos:", err);
+        setError("Hubo un error al obtener los datos.");
+      } finally {
+        if (setLoader) setLoader(false);
+      }
+    };
+
+    fetchData();
   }, [setLoader]);
 
-  // calcular la distancia de la ubicacion del usuario hasta la farmacia.
-  function calcularDistancia(lat1,lon1,lat2,lon2){
+  // Filtrar farmacias
+  useEffect(() => {
+    if (!data) return;
 
-    const R = 6371; // Radio de la Tierra en km
-    const dLat = toRad(lat2 - lat1);
-    const dLon = toRad(lon2 - lon1);
-    const a = 
-      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
-      Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    const km = R*c
+    const isEarlyMorning = horaActual >= inicio && horaActual <= fin;
+    const targetDay = isEarlyMorning ? day - 2 : day - 1;
+    const pharmaciesData = data[year]?.[month]?.[month + 1]?.[targetDay];
 
-    function toRad(degrees) {   
-      return degrees * (Math.PI / 180)
-    }
-    /*
-    function metros(num){
-      let mtrs = Math.round(num * 1000)
-      //let mtrs = num.toString().split('').splice(2,3).join('')
-        return `${mtrs}`
-    }
-    
-    function kilometros(num){
-      let kmts = parseFloat(num.toFixed(1))
-      //let kmts = num.toString().split('').splice(0,3).join('');
-      return `${kmts}`
+    if (!pharmaciesData) {
+      setArray([]);
+      return;
     }
 
-    
-      if(km < 1 ){
-        const mt = metros(km)
-        return mt; // distacia en metros
-      }else {
-        const kmt = kilometros(km)
-        return kmt
+    const pharmacies = pharmaciesData.pharmacies.map((pharmacy) => {
+      if (ubication) {
+        pharmacy.distance = calcularDistancia(
+          lat1,
+          lon1,
+          pharmacy.lat,
+          pharmacy.lon
+        );
+        pharmacy.distance =
+          pharmacy.distance < 99
+            ? parseFloat(pharmacy.distance.toFixed(1))
+            : Math.round(pharmacy.distance);
       }
-        */
-       return km
-  }
-//-------------------------------------------------------------------------
-useEffect(() => {
-  if(horaActual >= inicio && horaActual <= fin){
-    //console.log('muestra letra del dia anteior')
-    if (data) {
-      setLoader(true)
-      const newArray = [];
-      if(data[year][month][month+1][day-2]){
-        data[year][month][month+1][day-2].pharmacies.forEach(e => {
-            newArray.push(e);
-        });
-      }else{
-        setLoader(false);
-        return
-      }
+      return pharmacy;
+    });
 
-      if(ubication){
-        newArray.map(e => e.distance = calcularDistancia(lat1,lon1,e.lat,e.lon))
-        newArray.sort((a,b) => a.distance - b.distance )
-        newArray.forEach(e => {
-          if (e.distance < 99) {
-            e.distance = parseFloat(e.distance.toFixed(1)); // Formatea a un decimal si es menor a 99          
-        } else {
-            e.distance = e.distance % 1 === 0 
-                ? `${e.distance}` // Si no tiene decimales, muestra como entero
-                : `${e.distance.toFixed(1)}`; // Si tiene decimales, muestra con un decimal
-        }
-
-          /*
-          if(e.distance < 99){
-           e.distance =  parseFloat(e.distance.toFixed(1))
-          }
-           */
-        })
-      }    
-
-      setArray(newArray); 
-      setLetra(data[year][month][month+1][day-2].dateShift.toUpperCase())
-      setLoader(false)
-    } 
-  }else{
-    //console.log('Muestra la letra del dia actual')
-  if (data) {
-    setLoader(true);
-    const newArray = []; 
-    if(data[year][month][month+1][day-1]){
-      data[year][month][month+1][day-1].pharmacies.forEach(e => {
-        newArray.push(e);
-      });
-      
-    }else{
-      setLoader(false);
-      return
+    if (ubication) {
+      pharmacies.sort((a, b) => a.distance - b.distance);
     }
 
-    if(ubication){
-      newArray.map(e => e.distance = calcularDistancia(lat1,lon1,e.lat,e.lon))
-      newArray.sort((a,b) => a.distance - b.distance )
-      newArray.forEach(e => {
-
-        if (e.distance < 99) {
-          e.distance = parseFloat(e.distance.toFixed(1)); // Formatea a un decimal si es menor a 99
-      } else {
-          e.distance = e.distance % 1 === 0 
-              ? `${e.distance}` // Si no tiene decimales, muestra como entero
-              : `${e.distance.toFixed(1)}`; // Si tiene decimales, muestra con un decimal
-      }
-
-        
-        /*
-        if(e.distance < 99){
-         e.distance =  parseFloat(e.distance.toFixed(1))
-        }
-         */
-      })
-    }    
-    setArray(newArray); 
-    setLetra(data[year][month][month+1][day-1].dateShift.toUpperCase());
-    setLoader(false);
-  }
-}
-
-}, [data, month, day, ubication]);
+    setArray(pharmacies);
+    setLetra(pharmaciesData.dateShift.toUpperCase());
+  }, [data, day, month, year, horaActual, ubication, lat1, lon1]);
 
   if (error) {
-    return <div>{error}</div>;
+    return <div className="error-message">{error}</div>;
   }
 
   if (!data) {
-    return <div></div>;
+    return <div className="loading-message">Cargando datos...</div>;
   }
 
-  function showDistance(numDistance){
-    if(numDistance > 7000.0){
-      //setUbication(false)
-      //window.location.reload(); // recarga la pagina si da un error.
-    }else{
-      if(numDistance < 1 ){
-        return `${ Math.round(numDistance * 1000)} Mt.`
-      }else if ( numDistance === 'undefined' ){
-        return ''
-      }else {
-        return `${ numDistance} Km.`
-      }
-    }
-    
-  }
-  
-//<p>{ e.distance < 1 ? `${ Math.round(e.distance * 1000)} Mt.` : `${ e.distance} Km.`}</p>
+  const formatDistance = (distance) => {
+    if (distance < 1) return `${Math.round(distance * 1000)} Mt.`;
+    return `${distance} Km.`;
+  };
+
   return (
     <div className="containerFarmacias">
       <h2>Datos de Farmacias</h2>
-      <p>Letra: <span style={{ color: "green", fontWeight: "bold" }}>{letra}</span></p>
-      {array.map((e, i) => (
-        <div className="items" key={i}>
-          <div className="infoItems">
-            <p>{e.name}</p>
-            <p>{e.address}</p>
-            { 
-              ubication &&
-               
-               <p>{showDistance(e.distance)}</p> 
-              
-            }
-            <p>{e.tel}</p>
+      <p>
+        Letra: <span style={{ color: "green", fontWeight: "bold" }}>{letra}</span>
+      </p>
+      {array.length > 0 ? (
+        array.map((pharmacy, index) => (
+          <div className="items" key={index}>
+            <div className="infoItems">
+              <p>{pharmacy.name}</p>
+              <p>{pharmacy.address}</p>
+              {ubication && <p>{formatDistance(pharmacy.distance)}</p>}
+              <p>{pharmacy.tel}</p>
+            </div>
+            <div className="btn-container">
+              <a
+                href={`https://www.google.com/maps/search/?api=1&query=${pharmacy.lat},${pharmacy.lon}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Ver en mapa"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="40px"
+                  viewBox="0 -960 960 960"
+                  width="40px"
+                  fill="#EA3323"
+                >
+                  <path d="M480.06-486.67q30.27 0 51.77-21.56 21.5-21.55 21.5-51.83 0-30.27-21.56-51.77-21.55-21.5-51.83-21.5-30.27 0-51.77 21.56-21.5 21.55-21.5 51.83 0 30.27 21.56 51.77 21.55 21.5 51.83 21.5ZM480-80Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Z" />
+                </svg>
+              </a>
+            </div>
           </div>
-          <div className="btn-container">
-          <a href={`https://www.google.com/maps/search/?api=1&query=${e.lat},${e.lon}`} rel="noopener noreferrer" target="_blank" title="Ver en mapa" >
-            <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#EA3323">
-              <path d="M480.06-486.67q30.27 0 51.77-21.56 21.5-21.55 21.5-51.83 0-30.27-21.56-51.77-21.55-21.5-51.83-21.5-30.27 0-51.77 21.56-21.5 21.55-21.5 51.83 0 30.27 21.56 51.77 21.55 21.5 51.83 21.5ZM480-80Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Z"/>
-            </svg>
-          </a>  
-          </div>
-        </div>
-      ))}
+        ))
+      ) : (
+        <p>No se encontraron farmacias para mostrar.</p>
+      )}
     </div>
   );
 };
+
 export default Peticiones;
