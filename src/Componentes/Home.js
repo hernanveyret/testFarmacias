@@ -89,8 +89,6 @@ const [initConfig, setInitConfig] = useState(() => {
   }
 });
 
-const [ positions, setPositions ] = useState(null)
-
   const [ almanacType, setAlmanacType ] = useState(initConfig.almanacType)
   const [ modoNocturno, setModoNocturno ] = useState(initConfig.modoNocturno)
   const [ ubication, setUbication ] = useState(initConfig.ubicacion)
@@ -108,9 +106,19 @@ const [ positions, setPositions ] = useState(null)
   const [ year, setYear ] = useState(fecha.getFullYear()); // año
   const [ cantDiasMes, setCantDiasMes ] = useState(new Date(year, month + 1, 0).getDate()); // Ultimo dia del mes anterior
   const [ celdasVacias, setCeldasVacias ] = useState(new Date(year, month, 1).getDay()) // Posicion del primer dia del mes, del 0 al 6, dom-lun...
-  const [ lat1, setLat1 ] = useState(0);
-  const [ lon1, setLon1 ] = useState(0);
+  const [ lat1, setLat1 ] = useState(null)
+  const [ lon1, setLon1 ] = useState(null);
   
+
+  useEffect(() => {
+    geo()
+  },[]);
+
+  useEffect(() => {
+    console.log(lat1)
+  },[lat1])
+
+
   let hs = fecha.getHours();
   let mn = fecha.getMinutes();
   let ss = fecha.getSeconds()
@@ -210,19 +218,14 @@ const [ positions, setPositions ] = useState(null)
     localStorage.setItem('settingsFarmaciaV2', JSON.stringify(updatedConfig));
   }, [almanacType]);
 
-
-  
-
-  // Cambia el estado de ubicacion en settings y en el localStorage.
-  useEffect(() => {
+  function geo(){
     const options = {
       enableHighAccuracy: true,
       timeout: 5000,
       maximumAge: 0
     }
     
-    const success = ( position ) => {
-      setPositions(position)
+    const success = ( position ) => {      
       setLat1(position.coords.latitude);
       setLon1(position.coords.longitude);
         
@@ -241,13 +244,18 @@ const [ positions, setPositions ] = useState(null)
     }else{
       console.log('la geolocalizacion esta desactivada')
     }  
+  }
   
+
+  // Cambia el estado de ubicacion en settings y en el localStorage.
+  useEffect(() => {      
+      geo();
     const updatedConfig = {
       ...initConfig,
       ubicacion: ubication
     }
        
-setInitConfig(updatedConfig);
+    setInitConfig(updatedConfig);
     localStorage.setItem('settingsFarmaciaV2', JSON.stringify(updatedConfig));
   },[ubication])
 

@@ -173,7 +173,7 @@ useEffect(() => {
 
   function showDistance(numDistance){
     if(numDistance > 7000.0){
-      setUbication(false)
+      //setUbication(false)
       //window.location.reload(); // recarga la pagina si da un error.
     }else{
       if(numDistance < 1 ){
