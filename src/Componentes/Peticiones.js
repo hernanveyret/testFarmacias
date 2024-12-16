@@ -2,16 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./peticiones.css";
 
-const Peticiones = ({
-  hora,
-  day,
-  month,
-  year,
-  setLoader, // Asegúrate de que esta prop sea opcional y manejada correctamente
-  ubication,
-  lat1,
-  lon1,
-}) => {
+const Peticiones = ({hora,day,month,year,setLoader,ubication,lat1,lon1}) => {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [array, setArray] = useState([]);
@@ -19,6 +10,7 @@ const Peticiones = ({
 
   const url = "https://farmacia-servidor.vercel.app/api/farmacias";
 
+  // Convierte la hora en texto de string a una hora real
   const convertToTime = (timeStr) => {
     const [hours, minutes, seconds] = timeStr.split(":").map(Number);
     return new Date(2024, 0, 1, hours, minutes, seconds).getTime();
@@ -46,7 +38,7 @@ const Peticiones = ({
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (setLoader) setLoader(true); // Evitar llamadas durante renderizado
+        if (setLoader) setLoader(true); 
         const response = await axios.get(url);
         setData(response.data);
       } catch (err) {
@@ -75,16 +67,8 @@ const Peticiones = ({
 
     const pharmacies = pharmaciesData.pharmacies.map((pharmacy) => {
       if (ubication) {
-        pharmacy.distance = calcularDistancia(
-          lat1,
-          lon1,
-          pharmacy.lat,
-          pharmacy.lon
-        );
-        pharmacy.distance =
-          pharmacy.distance < 99
-            ? parseFloat(pharmacy.distance.toFixed(1))
-            : Math.round(pharmacy.distance);
+        pharmacy.distance = calcularDistancia(lat1,lon1,pharmacy.lat,pharmacy.lon);
+        pharmacy.distance = pharmacy.distance < 99 ? parseFloat(pharmacy.distance.toFixed(1)): Math.round(pharmacy.distance);
       }
       return pharmacy;
     });
@@ -102,7 +86,7 @@ const Peticiones = ({
   }
 
   if (!data) {
-    return <div className="loading-message">Cargando datos...</div>;
+    return <div></div>;
   }
 
   const formatDistance = (distance) => {

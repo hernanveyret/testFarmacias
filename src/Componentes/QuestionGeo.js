@@ -11,6 +11,7 @@ function QuestionGeo({ubication,setUbication,setQuestion,question}){
   function handleCancel(){
     setQuestion(false);
     setUbication(false);
+    
   }
   return (
     <div className="contanier-geo">

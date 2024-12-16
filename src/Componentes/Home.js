@@ -68,26 +68,14 @@ const Home = () => {
   let fotterRef = useRef()
   let cardHeaderRef = useRef()
 
-const [initConfig, setInitConfig] = useState(() => {
-  let localConfig = JSON.parse(localStorage.getItem('settingsFarmaciaV2'));
-  if (localConfig) {
-    return {
-      modoNocturno: localConfig.modoNocturno || false,
-      almanacType: localConfig.almanacType || true,
-      advertising: localConfig.advertising || false,
-      ubicacion: localConfig.hasOwnProperty('ubicacion') ? localConfig.ubicacion : true,
-      question: localConfig.hasOwnProperty('question') ? localConfig.question : true,
-    };
-  } else {
-    return {
-      modoNocturno: false,
-      almanacType: true,
-      advertising: false,
-      ubicacion: true,
-      question: true,
-    };
-  }
-});
+let localConfig = localStorage.getItem('settingsFarmaciaV2')
+  const [ initConfig, setInitConfig ] = useState(localConfig ? JSON.parse(localConfig) : { 
+    modoNocturno: false,
+    almanacType: true,
+    advertising: false,
+    ubicacion: true,
+    question: true,
+  });
 
   const [ almanacType, setAlmanacType ] = useState(initConfig.almanacType)
   const [ modoNocturno, setModoNocturno ] = useState(initConfig.modoNocturno)
@@ -113,11 +101,6 @@ const [initConfig, setInitConfig] = useState(() => {
   useEffect(() => {
     geo()
   },[]);
-
-  useEffect(() => {
-    console.log(lat1)
-  },[lat1])
-
 
   let hs = fecha.getHours();
   let mn = fecha.getMinutes();
@@ -246,18 +229,19 @@ const [initConfig, setInitConfig] = useState(() => {
     }  
   }
   
-
   // Cambia el estado de ubicacion en settings y en el localStorage.
-  useEffect(() => {      
+  useEffect(() => {  
+    console.log(ubication)    
       geo();
     const updatedConfig = {
       ...initConfig,
       ubicacion: ubication
     }
+    console.log(updatedConfig)
        
     setInitConfig(updatedConfig);
     localStorage.setItem('settingsFarmaciaV2', JSON.stringify(updatedConfig));
-  },[ubication])
+  },[ubication,question])
 
 
  
