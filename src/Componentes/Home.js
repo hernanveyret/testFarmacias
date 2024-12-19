@@ -211,7 +211,7 @@ let localConfig = localStorage.getItem('settingsFarmaciaV2')
     const success = ( position ) => {      
       setLat1(position.coords.latitude);
       setLon1(position.coords.longitude);
-        
+      
     }
     
     const error = (err) => {
@@ -231,20 +231,17 @@ let localConfig = localStorage.getItem('settingsFarmaciaV2')
   
   // Cambia el estado de ubicacion en settings y en el localStorage.
   useEffect(() => {  
-    console.log(ubication)    
+       
       geo();
     const updatedConfig = {
       ...initConfig,
       ubicacion: ubication
     }
-    console.log(updatedConfig)
+  
        
     setInitConfig(updatedConfig);
     localStorage.setItem('settingsFarmaciaV2', JSON.stringify(updatedConfig));
   },[ubication,question])
-
-
- 
 
   //Cambia el estado para mostrar el cartel de consulta para la geolocalizacion.
   useEffect(() => {
