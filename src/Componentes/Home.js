@@ -8,6 +8,7 @@ import Loader from './Loader';
 import Maps from './Maps';
 import QuestionGeo from './QuestionGeo';
 import Error from './Error';
+import SharedConfirm from './ShareConfirm';
 
 import './home.css';
 
@@ -82,10 +83,11 @@ let localConfig = localStorage.getItem('settingsFarmaciaV2')
   const [ ubication, setUbication ] = useState(initConfig.ubicacion)
   const [ question, setQuestion ] = useState(initConfig.question);
   
-  const [ error, setError ] = useState(false)
-  const [ loader, setLoader ] = useState(false)
-  const [ mapsOn, setMapsOn ] = useState(false)
-  const [ fecha, setFecha ] = useState(new Date())
+  const [ shared, setShared ] = useState(false);
+  const [ error, setError ] = useState(false);
+  const [ loader, setLoader ] = useState(false);
+  const [ mapsOn, setMapsOn ] = useState(false);
+  const [ fecha, setFecha ] = useState(new Date());
   const [ day, setDay ] = useState(fecha.getDate()); // dia en numero.
   const [ dayString, setDayString ] = useState(fecha.toLocaleString('es-ES', { weekday: 'long' }));
   const [ month, setMonth ] = useState(fecha.getMonth()); // mes en numero.
@@ -237,8 +239,7 @@ let localConfig = localStorage.getItem('settingsFarmaciaV2')
       ...initConfig,
       ubicacion: ubication
     }
-  
-       
+     
     setInitConfig(updatedConfig);
     localStorage.setItem('settingsFarmaciaV2', JSON.stringify(updatedConfig));
   },[ubication,question])
@@ -293,6 +294,9 @@ let localConfig = localStorage.getItem('settingsFarmaciaV2')
         </button>
       </header>
       <main>
+            { 
+              shared && <SharedConfirm />
+            }
             { question && <QuestionGeo 
               question={question} 
               setQuestion={setQuestion}
@@ -304,6 +308,8 @@ let localConfig = localStorage.getItem('settingsFarmaciaV2')
                 setError={setError}
             /> }
             <Settings 
+              shared={shared}
+              setShared={setShared}
               settingOptions={settingOptions}
               handleChangeAlmanacType={handleChangeAlmanacType} 
               setModoNocturno={setModoNocturno}

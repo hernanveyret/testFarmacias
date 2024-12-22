@@ -1,14 +1,17 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import './settings.css';
-const Settings = ({settingOptions,almanacType,handleChangeAlmanacType,setModoNocturno,modoNocturno,ubication,setUbication}) => {
+const Settings = ({settingOptions,almanacType,handleChangeAlmanacType,setModoNocturno,modoNocturno,ubication,setUbication,shared,setShared}) => {
 
   const sharedApp = () => {
-    navigator.clipboard.writeText('https://test-farmacias.vercel.app/')
+    navigator.clipboard.writeText('https://test-farmacias.vercel.app/') // copia el texto en el portapapeles del dispositivo
     .then(() => {
-      console.log('se copio')
+      setShared(true)
+      setTimeout(() => {
+       setShared(false)
+      }, 3000);
     })
     .catch(()=> {
-      console.log('error')
+      console.log('Error al compiar el link al portapapeles')
     })
   }
 
