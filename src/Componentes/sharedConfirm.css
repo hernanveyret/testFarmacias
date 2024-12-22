@@ -23,3 +23,15 @@
   justify-content: center;
   align-items: center;
 }
+
+@media screen and ( min-width: 37em) {
+  .container-shared-text {
+    width: 20%;
+  }
+}
+
+@media screen and ( min-width: 500px) {
+  .container-shared-text {
+    width: 30%;
+  }
+}
