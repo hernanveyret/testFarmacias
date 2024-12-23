@@ -32,6 +32,12 @@
 
 @media screen and ( min-width: 500px) {
   .container-shared-text {
+    width: 50%;
+  }
+}
+
+@media screen and ( min-width: 1000px) {
+  .container-shared-text {
     width: 30%;
   }
 }

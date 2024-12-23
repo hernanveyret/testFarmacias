@@ -83,7 +83,7 @@ let localConfig = localStorage.getItem('settingsFarmaciaV2')
   const [ ubication, setUbication ] = useState(initConfig.ubicacion)
   const [ question, setQuestion ] = useState(initConfig.question);
   
-  const [ shared, setShared ] = useState(false);
+  const [ shared, setShared ] = useState(true);
   const [ error, setError ] = useState(false);
   const [ loader, setLoader ] = useState(false);
   const [ mapsOn, setMapsOn ] = useState(false);
