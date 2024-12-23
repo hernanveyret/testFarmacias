@@ -1,12 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, {useEffect, useRef, useState} from "react";
 import axios from "axios";
 import "./peticiones.css";
+import MapaUbicaciones from "./MapaUbicaciones";
+import iconoPosicion from '../img/iconoPosicion.svg'
 
-const Peticiones = ({hora,day,month,year,setLoader,ubication,lat1,lon1}) => {
-  const [data, setData] = useState(null);
-  const [error, setError] = useState(null);
-  const [array, setArray] = useState([]);
-  const [letra, setLetra] = useState("");
+const Peticiones = ({hora, day, month, year, setLoader, ubication, lat1, lon1}) => {
+    const [data, setData] = useState(null);
+    const [error, setError] = useState(null);
+    const [array, setArray] = useState([]);
+    const [letra, setLetra] = useState("");
+    const [mostrarMapa, setMostrarMapa] = useState(false);
 
   const url = "https://farmacia-servidor.vercel.app/api/farmacias";
 
@@ -20,10 +23,12 @@ const Peticiones = ({hora,day,month,year,setLoader,ubication,lat1,lon1}) => {
   const inicio = convertToTime("00:00:00");
   const fin = convertToTime("08:30:00");
 
-  const calcularDistancia = (lat1, lon1, lat2, lon2) => {
-    const R = 6371;
-    const dLat = ((lat2 - lat1) * Math.PI) / 180;
-    const dLon = ((lon2 - lon1) * Math.PI) / 180;
+    const mapRef = useRef(null);
+
+    const calcularDistancia = (lat1, lon1, lat2, lon2) => {
+        const R = 6371;
+        const dLat = ((lat2 - lat1) * Math.PI) / 180;
+        const dLon = ((lon2 - lon1) * Math.PI) / 180;
 
     const a =
       Math.sin(dLat / 2) ** 2 +
@@ -134,6 +139,22 @@ const Peticiones = ({hora,day,month,year,setLoader,ubication,lat1,lon1}) => {
       )}
     </div>
   );
+                <button onClick={() => setMostrarMapa(!mostrarMapa)}>
+                    {mostrarMapa ? 'Ocultar mapa' : 'Mostrar mapa'}
+                </button>
+            {array && !mostrarMapa ? (
+            ) : ''}
+            {!array && (
+                <p>No se encontraron farmacias para mostrar.</p>
+            )}
+            {array && mostrarMapa && (
+                <div style={{height: 400, width: "100%"}}>
+                    <MapaUbicaciones puntos={array} actual={{
+                        lat: lat1,
+                        lng: lon1
+                    }}/>
+                </div>
+            )}
 };
 
 export default Peticiones;
