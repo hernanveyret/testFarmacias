@@ -1,12 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, {useEffect, useRef, useState} from "react";
 import axios from "axios";
 import "./peticiones.css";
+import MapaUbicaciones from "./MapaUbicaciones";
+import iconoPosicion from '../img/iconoPosicion.svg'
 
-const Peticiones = ({hora,day,month,year,setLoader,ubication,lat1,lon1}) => {
-  const [data, setData] = useState(null);
-  const [error, setError] = useState(null);
-  const [array, setArray] = useState([]);
-  const [letra, setLetra] = useState("");
+const Peticiones = ({hora, day, month, year, setLoader, ubication, lat1, lon1}) => {
+    const [data, setData] = useState(null);
+    const [error, setError] = useState(null);
+    const [array, setArray] = useState([]);
+    const [letra, setLetra] = useState("");
+    const [mostrarMapa, setMostrarMapa] = useState(false);
 
   const url = "https://farmacia-servidor.vercel.app/api/farmacias";
 
@@ -20,10 +23,12 @@ const Peticiones = ({hora,day,month,year,setLoader,ubication,lat1,lon1}) => {
   const inicio = convertToTime("00:00:00");
   const fin = convertToTime("08:30:00");
 
-  const calcularDistancia = (lat1, lon1, lat2, lon2) => {
-    const R = 6371;
-    const dLat = ((lat2 - lat1) * Math.PI) / 180;
-    const dLon = ((lon2 - lon1) * Math.PI) / 180;
+    const mapRef = useRef(null);
+
+    const calcularDistancia = (lat1, lon1, lat2, lon2) => {
+        const R = 6371;
+        const dLat = ((lat2 - lat1) * Math.PI) / 180;
+        const dLon = ((lon2 - lon1) * Math.PI) / 180;
 
     const a =
       Math.sin(dLat / 2) ** 2 +
@@ -94,46 +99,53 @@ const Peticiones = ({hora,day,month,year,setLoader,ubication,lat1,lon1}) => {
     return `${distance} Km.`;
   };
 
-  return (
-    <div className="containerFarmacias">
-      <h2>Datos de Farmacias</h2>
-      <p>
-        Letra: <span style={{ color: "green", fontWeight: "bold" }}>{letra}</span>
-      </p>
-      {array.length > 0 ? (
-        array.map((pharmacy, index) => (
-          <div className="items" key={index}>
-            <div className="infoItems">
-              <p>{pharmacy.name}</p>
-              <p>{pharmacy.address}</p>
-              { ubication && <p>{formatDistance(pharmacy.distance)}</p> }
-              <p>{pharmacy.tel}</p>
-            </div>
-            <div className="btn-container">
-              <a
-                href={`https://www.google.com/maps/search/?api=1&query=${pharmacy.lat},${pharmacy.lon}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                title="Ver en mapa"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  height="40px"
-                  viewBox="0 -960 960 960"
-                  width="40px"
-                  fill="#EA3323"
-                >
-                  <path d="M480.06-486.67q30.27 0 51.77-21.56 21.5-21.55 21.5-51.83 0-30.27-21.56-51.77-21.55-21.5-51.83-21.5-30.27 0-51.77 21.56-21.5 21.55-21.5 51.83 0 30.27 21.56 51.77 21.55 21.5 51.83 21.5ZM480-80Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Z" />
-                </svg>
-              </a>
-            </div>
-          </div>
-        ))
-      ) : (
-        <p>No se encontraron farmacias para mostrar.</p>
-      )}
-    </div>
-  );
+    return (
+        <div className="containerFarmacias">
+            <h2>Datos de Farmacias</h2>
+            <p>
+                Letra: <span style={{color: "green", fontWeight: "bold"}}>{letra}</span>
+                <button onClick={() => setMostrarMapa(!mostrarMapa)}>
+                    {mostrarMapa ? 'Ocultar mapa' : 'Mostrar mapa'}
+                </button>
+            </p>
+            {array && !mostrarMapa ? (
+                array.map((pharmacy, index) => (
+                    <div className="items" key={index}>
+                        <div className="infoItems">
+                            <p>{pharmacy.name}</p>
+                            <p>{pharmacy.address}</p>
+                            {ubication && <p>{formatDistance(pharmacy.distance)}</p>}
+                            <p>{pharmacy.tel}</p>
+                        </div>
+                        <div className="btn-container">
+                            <a
+                                href={`https://www.google.com/maps/search/?api=1&query=${pharmacy.lat},${pharmacy.lon}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                title="Ver en mapa"
+                            >
+                                <img src={iconoPosicion}/>
+                            </a>
+                        </div>
+                    </div>
+                ))
+            ) : ''}
+
+            {!array && (
+                <p>No se encontraron farmacias para mostrar.</p>
+            )}
+
+            {array && mostrarMapa && (
+                <div style={{height: 400, width: "100%"}}>
+                    <MapaUbicaciones puntos={array} actual={{
+                        lat: lat1,
+                        lng: lon1
+                    }}/>
+                </div>
+            )}
+
+        </div>
+    );
 };
 
 export default Peticiones;
