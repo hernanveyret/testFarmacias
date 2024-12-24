@@ -17,7 +17,11 @@
   width: 70%;
   padding-left: 1rem;
 }
-
+.btn-show-map {
+  background: transparent;
+  border: none;
+  margin: 5px 0;
+}
 .btn-container {
   width: 30%;
   display:flex;

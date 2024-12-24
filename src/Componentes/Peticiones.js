@@ -4,7 +4,7 @@ import "./peticiones.css";
 import MapaUbicaciones from "./MapaUbicaciones";
 import iconoPosicion from '../img/iconoPosicion.svg'
 
-const Peticiones = ({hora, day, month, year, setLoader, ubication, lat1, lon1}) => {
+const Peticiones = ({hora, day, month, year, setLoader, ubication, lat1, lon1, modoNocturno}) => {
     const [data, setData] = useState(null);
     const [error, setError] = useState(null);
     const [array, setArray] = useState([]);
@@ -104,10 +104,26 @@ const Peticiones = ({hora, day, month, year, setLoader, ubication, lat1, lon1}) 
             <h2>Datos de Farmacias</h2>
             <p>
                 Letra: <span style={{color: "green", fontWeight: "bold"}}>{letra}</span>
-                <button onClick={() => setMostrarMapa(!mostrarMapa)}>
-                    {mostrarMapa ? 'Ocultar mapa' : 'Mostrar mapa'}
-                </button>
+                
             </p>
+            {
+              modoNocturno ? 
+              <button className="btn-show-map" onClick={() => setMostrarMapa(!mostrarMapa)} title="Mostrar/Ocultar mapa">
+                {mostrarMapa ? 
+                  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#EA3323"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg> : 
+                  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#008000"><path d="m600-120-240-84-186 72q-20 8-37-4.5T120-170v-560q0-13 7.5-23t20.5-15l212-72 240 84 186-72q20-8 37 4.5t17 33.5v560q0 13-7.5 23T812-192l-212 72Zm-40-98v-468l-160-56v468l160 56Zm80 0 120-40v-474l-120 46v468Zm-440-10 120-46v-468l-120 40v474Zm440-458v468-468Zm-320-56v468-468Z"/></svg>
+                }
+              </button>
+                :
+              <button className="btn-show-map" onClick={() => setMostrarMapa(!mostrarMapa)} title="Mostrar/Ocultar mapa">
+                {mostrarMapa ? 
+                  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#EA3323"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
+                : 
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#008000"><path d="m600-120-240-84-186 72q-20 8-37-4.5T120-170v-560q0-13 7.5-23t20.5-15l212-72 240 84 186-72q20-8 37 4.5t17 33.5v560q0 13-7.5 23T812-192l-212 72Zm-40-98v-468l-160-56v468l160 56Zm80 0 120-40v-474l-120 46v468Zm-440-10 120-46v-468l-120 40v474Zm440-458v468-468Zm-320-56v468-468Z"/></svg>
+                }
+              </button>
+            }
+            
             {array && !mostrarMapa ? (
                 array.map((pharmacy, index) => (
                     <div className="items" key={index}>
