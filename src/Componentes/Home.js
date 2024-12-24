@@ -361,6 +361,7 @@ let localConfig = localStorage.getItem('settingsFarmaciaV2')
       </main>
       <footer ref={fotterRef}>
         <p>Diseñado por Hernán Luis Veyret - 2024 - Version 1.2 - hernanveyret@hotmail.com</p>
+        <p>Colaboracion de Manuel Eduardo Canepa - manuelcanepa@gmail.com</p>
       </footer>
     </div>
   )
