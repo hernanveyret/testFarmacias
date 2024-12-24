@@ -355,7 +355,6 @@ let localConfig = localStorage.getItem('settingsFarmaciaV2')
               ubication={ubication}
               lat1={lat1}
               lon1={lon1}
-              modoNocturno={modoNocturno}
             />
         </article>
       </main>

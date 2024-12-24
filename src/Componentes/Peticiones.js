@@ -1,10 +1,11 @@
 import React, {useEffect, useRef, useState} from "react";
 import axios from "axios";
 import "./peticiones.css";
+import iconoMaps from '../img/maps-32px.png'
 import MapaUbicaciones from "./MapaUbicaciones";
 import iconoPosicion from '../img/iconoPosicion.svg'
 
-const Peticiones = ({hora, day, month, year, setLoader, ubication, lat1, lon1, modoNocturno}) => {
+const Peticiones = ({hora, day, month, year, setLoader, ubication, lat1, lon1}) => {
     const [data, setData] = useState(null);
     const [error, setError] = useState(null);
     const [array, setArray] = useState([]);
@@ -110,7 +111,7 @@ const Peticiones = ({hora, day, month, year, setLoader, ubication, lat1, lon1, m
                 {mostrarMapa ? 
                 <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#EA3323"><path d="m251.33-204.67-46.66-46.66L433.33-480 204.67-708.67l46.66-46.66L480-526.67l228.67-228.66 46.66 46.66L526.67-480l228.66 228.67-46.66 46.66L480-433.33 251.33-204.67Z"/></svg>
                 : 
-                <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#008000"><path d="m608-120-255.33-90-181.34 71.33q-18 8.67-34.66-2.16Q120-151.67 120-172v-558.67q0-13 7.5-23t19.83-15L352.67-840 608-750.67 788.67-822q18-8 34.66 2.5Q840-809 840-788.67v563.34q0 11.66-7.5 20.33-7.5 8.67-19.17 13L608-120Zm-36-82.67v-492.66L388-758v492.67l184 62.66Zm66.67 0 134.66-44.66v-499.34l-134.66 51.34v492.66Zm-452-11.33 134.66-51.33V-758l-134.66 44.67V-214Zm452-481.33v492.66-492.66ZM321.33-758v492.67V-758Z"/></svg>
+                <img src={iconoMaps} alt="Icono mapa" />
                 }
               </button>
             
