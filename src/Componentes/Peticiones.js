@@ -64,7 +64,20 @@ const Peticiones = ({hora, day, month, year, setLoader, ubication, lat1, lon1}) 
 
     const isEarlyMorning = horaActual >= inicio && horaActual <= fin;
     const targetDay = isEarlyMorning ? day - 2 : day - 1;
-    const pharmaciesData = data[year]?.[month]?.[month + 1]?.[targetDay];
+
+    let pharmaciesData;
+    if( day === 1 && month+1 === 1 && isEarlyMorning === true){
+      pharmaciesData = data[year-1]?.[11][12][30];
+      
+      console.log('año anterior', pharmaciesData)
+    }else{
+      pharmaciesData = data[year]?.[month]?.[month + 1]?.[targetDay];
+    }
+   // const pharmaciesData = data[year]?.[month]?.[month + 1]?.[targetDay];
+
+    console.log(targetDay,month+1,year-1)
+
+    console.log(pharmaciesData)
 
     if (!pharmaciesData) {
       setArray([]);
