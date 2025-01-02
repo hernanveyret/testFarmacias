@@ -72,6 +72,11 @@ const Home = () => {
 
 let localConfig = localStorage.getItem('settingsFarmaciaV3')
 
+
+if(localStorage.getItem('settingsFarmaciaV2')){
+  localStorage.removeItem('settingsFarmaciaV2');
+}
+
   const [ initConfig, setInitConfig ] = useState(localConfig ? JSON.parse(localConfig) : { 
     modoNocturno: false,
     almanacType: true,
