@@ -18,10 +18,10 @@ const Error = ({setError,checkError,setIsErrorBannerVisible}) => {
     <div className="contanier-geo">
       <div className="cuadro-question">
         <div className="cuadro-text">
-          <p>La ubicación no está activada en su dispositivo. Por favor, actívela para calcular la distancia a las farmacias y vuelva a activar la funcion.</p>          
+          <p>La ubicación no está activada en su dispositivo. Por favor, actívela para calcular la distancia a las farmacias, reinicie o actualice la pagina y vuelva a activar la funcion desde el menu.</p>          
         </div>
         <div className="cuadro-check">
-          <input type="checkbox" name="check" ref={checkError}/> <p>No volver a mostrar</p>
+          <input type="checkbox" name="check" ref={checkError}/> <p>No volver a mostrar.</p>
         </div>
           <div className="container-btn-error">
             <button className="btn-cerrar-error" onClick={closeErrorBanner}>CERRAR</button>
