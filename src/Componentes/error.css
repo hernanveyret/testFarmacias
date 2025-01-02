@@ -10,6 +10,13 @@
   color: white;
 }
 
+.cuadro-check {
+  width: 100%;
+  display: flex;
+  padding: .5rem 0;
+  justify-content: center;
+  gap: .5rem;
+}
 @media screen and ( min-width: 37em) {
   .cuadro-question {
     max-width: 20%;

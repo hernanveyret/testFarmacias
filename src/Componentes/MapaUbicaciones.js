@@ -4,7 +4,14 @@ import "leaflet/dist/leaflet.css";
 import logo from '../img/iconoCruzFarmaciaVerde.png'
 import iconoPosicion from '../img/iconoPosicion.svg'
 
+// -33.34701293557163, -60.221357974152944
+
 const MapaUbicaciones = ({puntos, actual}) => {
+
+    if (actual.lat === null && actual.lng === null ){
+        actual.lat = -33.34701293557163;
+        actual.lng = -60.221357974152944;
+    }
     const mapRef = useRef(null);
     const containerRef = useRef(null);
 

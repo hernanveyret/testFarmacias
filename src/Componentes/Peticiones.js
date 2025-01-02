@@ -64,20 +64,8 @@ const Peticiones = ({hora, day, month, year, setLoader, ubication, lat1, lon1}) 
 
     const isEarlyMorning = horaActual >= inicio && horaActual <= fin;
     const targetDay = isEarlyMorning ? day - 2 : day - 1;
-
-    let pharmaciesData;
-    if( day === 1 && month+1 === 1 && isEarlyMorning === true){
-      pharmaciesData = data[year-1]?.[11][12][30];
-      
-      console.log('año anterior', pharmaciesData)
-    }else{
-      pharmaciesData = data[year]?.[month]?.[month + 1]?.[targetDay];
-    }
-   // const pharmaciesData = data[year]?.[month]?.[month + 1]?.[targetDay];
-
-    console.log(targetDay,month+1,year-1)
-
-    console.log(pharmaciesData)
+    const pharmaciesData = ( day === 1 && month+1 === 1 && isEarlyMorning === true) ? data[year-1]?.[11][12][30] : data[year]?.[month]?.[month + 1]?.[targetDay];
+    //const pharmaciesData = data[year]?.[month]?.[month + 1]?.[targetDay];
 
     if (!pharmaciesData) {
       setArray([]);
@@ -144,7 +132,7 @@ const Peticiones = ({hora, day, month, year, setLoader, ubication, lat1, lon1}) 
                                 rel="noopener noreferrer"
                                 title="Ver en mapa"
                             >
-                                <img src={iconoPosicion}/>
+                                <img src={iconoPosicion} alt="Icono de posicion en el mapa"/>
                             </a>
                         </div>
                     </div>
@@ -155,15 +143,18 @@ const Peticiones = ({hora, day, month, year, setLoader, ubication, lat1, lon1}) 
                 <p>No se encontraron farmacias para mostrar.</p>
             )}
 
-            {array && mostrarMapa && (
-                <div style={{height: 400, width: "100%"}}>
-                    <MapaUbicaciones puntos={array} actual={{
-                        lat: lat1,
-                        lng: lon1
-                    }}/>
-                </div>
+            { array && mostrarMapa &&  (
+              <div style={{ height: 400, width: "100%" }}>
+                <MapaUbicaciones
+                  puntos={array}
+                  ubication={ubication}
+                  actual={{
+                    lat: lat1,
+                    lng: lon1,
+                  }}
+                />
+              </div>
             )}
-
         </div>
     );
 };
