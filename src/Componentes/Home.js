@@ -70,7 +70,7 @@ const Home = () => {
   let cardHeaderRef = useRef()
   let checkError = useRef()
 
-let localConfig = localStorage.getItem('settingsFarmaciaV2')
+let localConfig = localStorage.getItem('settingsFarmaciaV3')
 
   const [ initConfig, setInitConfig ] = useState(localConfig ? JSON.parse(localConfig) : { 
     modoNocturno: false,
@@ -80,14 +80,6 @@ let localConfig = localStorage.getItem('settingsFarmaciaV2')
     question: true,
     isErrorBannerVisible: true
   });
-
-  if(!initConfig.hasOwnProperty('isErrorBannerVisible')){
-    let updatedConfig = {
-      ...initConfig,
-      isErrorBannerVisible: true
-    }
-    localStorage.setItem('settingsFarmaciaV2', JSON.stringify(updatedConfig));
-  }
 
   const [ almanacType, setAlmanacType ] = useState(initConfig.almanacType)
   const [ modoNocturno, setModoNocturno ] = useState(initConfig.modoNocturno)
@@ -149,7 +141,7 @@ useEffect(() => {
       ...initConfig,
       isErrorBannerVisible: false
     }
-    localStorage.setItem('settingsFarmaciaV2', JSON.stringify(updatedConfig));
+    localStorage.setItem('settingsFarmaciaV3', JSON.stringify(updatedConfig));
   }
   
 },[error])
@@ -224,7 +216,7 @@ useEffect(() => {
     };
   
     setInitConfig(updatedConfig);
-    localStorage.setItem('settingsFarmaciaV2', JSON.stringify(updatedConfig));
+    localStorage.setItem('settingsFarmaciaV3', JSON.stringify(updatedConfig));
   }, [almanacType]);
 
   function geo(){
@@ -265,7 +257,7 @@ useEffect(() => {
     }
      
     setInitConfig(updatedConfig);
-    localStorage.setItem('settingsFarmaciaV2', JSON.stringify(updatedConfig));
+    localStorage.setItem('settingsFarmaciaV3', JSON.stringify(updatedConfig));
   },[ubication,question])
 
   //Cambia el estado para mostrar el cartel de consulta para la geolocalizacion.
@@ -276,7 +268,7 @@ useEffect(() => {
     }
 
     setInitConfig(updatedConfig);
-    localStorage.setItem('settingsFarmaciaV2', JSON.stringify(updatedConfig));
+    localStorage.setItem('settingsFarmaciaV3', JSON.stringify(updatedConfig));
   },[question])
 
   // Cambio de normal a modo nocturno
@@ -286,7 +278,7 @@ useEffect(() => {
       modoNocturno: modoNocturno
     };
     setInitConfig(updatedConfig);
-    localStorage.setItem('settingsFarmaciaV2', JSON.stringify(updatedConfig));
+    localStorage.setItem('settingsFarmaciaV3', JSON.stringify(updatedConfig));
     
     if(modoNocturno === true ) {
       headerRef.current.classList.add('activateDarkMode')
