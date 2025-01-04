@@ -37,7 +37,16 @@ const Peticiones = ({hora, day, month, year, setLoader, ubication, lat1, lon1}) 
         Math.cos((lat2 * Math.PI) / 180) *
         Math.sin(dLon / 2) ** 2;
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c;
+/*
+    if( R*c > 7000 ){
+      console.log('Cargando...')
+      return 'Cargando...'
+    }else{
+      return R * c;
+  }
+  */
+      console.log(R*c)
+     return R * c;
   };
 
   // Fetch de datos
@@ -75,10 +84,18 @@ const Peticiones = ({hora, day, month, year, setLoader, ubication, lat1, lon1}) 
     const pharmacies = pharmaciesData.pharmacies.map((pharmacy) => {
       if (ubication) {
         pharmacy.distance = calcularDistancia(lat1,lon1,pharmacy.lat,pharmacy.lon);
-        pharmacy.distance = pharmacy.distance < 99 ? parseFloat(pharmacy.distance.toFixed(1)): Math.round(pharmacy.distance);
+        console.log(typeof pharmacy.distance)
+        if(pharmacy.distance > 7000.0){
+           pharmacy.distance = 'Cargando...'
+        } else if ( pharmacy.distance < 99 ){
+          pharmacy.distance = parseFloat(pharmacy.distance.toFixed(1))
+        } else {
+          pharmacy.distance = Math.round(pharmacy.distance)
+        }
+        //pharmacy.distance = pharmacy.distance < 99 ? parseFloat(pharmacy.distance.toFixed(1)): Math.round(pharmacy.distance);
       }
       return pharmacy;
-    });
+    });   
 
     if (ubication) {
       pharmacies.sort((a, b) => a.distance - b.distance);
@@ -97,10 +114,11 @@ const Peticiones = ({hora, day, month, year, setLoader, ubication, lat1, lon1}) 
   }
 
   const formatDistance = (distance) => {
-    if (distance < 1) return `${Math.round(distance * 1000)} Mt.`;
-    return `${distance} Km.`;
+   if (distance < 1)  return `${Math.round(distance * 1000)} Mt.`;
+      return `${distance} Km.`;
   };
 
+  
     return (
         <div className="containerFarmacias">
             <h2>Datos de Farmacias</h2>
@@ -122,7 +140,7 @@ const Peticiones = ({hora, day, month, year, setLoader, ubication, lat1, lon1}) 
                         <div className="infoItems">
                             <p>{pharmacy.name}</p>
                             <p>{pharmacy.address}</p>
-                            {ubication && <p>{formatDistance(pharmacy.distance) > 7000.0 ? 'Cargando...' : formatDistance(pharmacy.distance) }</p>}
+                            {ubication && <p>{formatDistance(pharmacy.distance) == 'NaN km' ? 'Cargando...': formatDistance(pharmacy.distance) }</p>}
                             <p>{pharmacy.tel}</p>
                         </div>
                         <div className="btn-container">
