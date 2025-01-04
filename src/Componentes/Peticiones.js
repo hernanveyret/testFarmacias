@@ -140,7 +140,7 @@ const Peticiones = ({hora, day, month, year, setLoader, ubication, lat1, lon1}) 
                         <div className="infoItems">
                             <p>{pharmacy.name}</p>
                             <p>{pharmacy.address}</p>
-                            {ubication && <p>{formatDistance(pharmacy.distance) == 'NaN km' ? 'Cargando...': formatDistance(pharmacy.distance) }</p>}
+                            {ubication && <p>{formatDistance(pharmacy.distance)}</p>}
                             <p>{pharmacy.tel}</p>
                         </div>
                         <div className="btn-container">
