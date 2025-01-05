@@ -4,14 +4,10 @@ import './error.css';
 const Error = ({setError,checkError,setIsErrorBannerVisible}) => {
 
   const closeErrorBanner = () => {
-    console.log(checkError.current.checked)
-
     setError(false);
     if(checkError.current.checked){
-      setIsErrorBannerVisible(false)
-      console.log(checkError.current.checked)
-    };
-    
+      setIsErrorBannerVisible(false) 
+    }; 
   }
 
   return (

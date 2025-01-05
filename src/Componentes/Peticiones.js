@@ -35,15 +35,6 @@ const Peticiones = ({hora, day, month, year, setLoader, ubication, lat1, lon1}) 
       Math.cos((lat2 * Math.PI) / 180) *
       Math.sin(dLon / 2) ** 2;
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    /*
-        if( R*c > 7000 ){
-          console.log('Cargando...')
-          return 'Cargando...'
-        }else{
-          return R * c;
-      }
-      */
-    console.log('Distancia', R * c)
     return R * c;
   };
 

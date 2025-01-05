@@ -37,7 +37,6 @@ const Home = () => {
 
   let localConfig = localStorage.getItem('settingsFarmaciaV3')
 
-
   if (localStorage.getItem('settingsFarmaciaV2')) {
     localStorage.removeItem('settingsFarmaciaV2');
   }

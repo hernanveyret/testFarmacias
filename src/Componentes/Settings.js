@@ -3,7 +3,7 @@ import './settings.css';
 const Settings = ({settingOptions,almanacType,handleChangeAlmanacType,setModoNocturno,modoNocturno,ubication,setUbication,shared,setShared}) => {
 
   const sharedApp = () => {
-    navigator.clipboard.writeText('https://test-farmacias.vercel.app/') // copia el texto en el portapapeles del dispositivo
+    navigator.clipboard.writeText('https://turnos-de-farmacias-sn.vercel.app/') // copia el texto en el portapapeles del dispositivo
     .then(() => {
       setShared(true)
       setTimeout(() => {
