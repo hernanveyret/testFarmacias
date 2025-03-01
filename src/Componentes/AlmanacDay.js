@@ -1,7 +1,7 @@
 import React from 'react';
 import './almanacDay.css';
 
-const AlmanacDay = ({day,month,monthString,dayString,year,handlePrev,handleNext, handleChangeDayStringNext,handleChangeDayStringPrev,cardHeaderRef}) => {
+const AlmanacDay = ({day,month,monthString,dayString,year,handlePrev,handleNext, handleChangeDayStringNext,handleChangeDayStringPrev,cardHeaderRef,toDay}) => {
  
   return (
     <div className="containerAlmanac">
@@ -21,6 +21,7 @@ const AlmanacDay = ({day,month,monthString,dayString,year,handlePrev,handleNext,
             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960  960 960" width="24px" fill="#FFFFFF"><path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z"/></svg>
             </button> 
         }
+        <button className='toDay' onClick={toDay}>HOY</button>
         </div>
         <div className="dayInfo">
           <p>{dayString[0].toUpperCase() + dayString.slice(1)}</p>
