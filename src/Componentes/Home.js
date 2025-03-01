@@ -114,7 +114,7 @@ const Home = () => {
   // Mes anterior
   const handlePrev = () => {
     month === 0 ? setMonth(0) : setMonth(month - 1);
-    setDay(1)
+    setDay(new Date(year, month, 0).getDate())  
   }
   //Mes siguiente
   const handleNext = () => {
